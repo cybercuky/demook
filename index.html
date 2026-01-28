@@ -32,6 +32,7 @@ body{
   font-weight:bold;
   cursor:pointer;
   text-decoration:none;
+  border:none;
 }
 
 /* SECCIONES */
@@ -40,7 +41,7 @@ body{
   background:rgba(0,0,0,.65);
 }
 
-/* ===== INTRO CASTILLO ===== */
+/* ===== INTRO CASTILLO (ORIGINAL COMPLETO) ===== */
 .intro{
   position:fixed;
   inset:0;
@@ -115,11 +116,6 @@ body{
   justify-content:center;
 }
 .logo{width:300px;margin:0 auto 20px}
-.titulo-xv{
-  font-family:'Great Vibes',cursive;
-  font-size:4rem;
-  color:#ff4fd8;
-}
 .foto-bautizo{
   width:80%;
   max-width:320px;
@@ -149,7 +145,7 @@ body{
 }
 .time-box span{font-size:1.6rem;color:#ffd700}
 
-/* CRISTAL */
+/* GLASS */
 .glass-section{
   max-width:900px;
   margin:0 auto;
@@ -168,7 +164,17 @@ body{
   border-radius:22px;
   background:rgba(0,0,0,.45);
 }
-.glass-card h3{color:#ffb6ec}
+
+/* SCROLL CINEMÁTICO */
+.reveal{
+  opacity:0;
+  transform:translateY(60px) scale(.96);
+  transition:1.2s cubic-bezier(.19,1,.22,1);
+}
+.reveal.active{
+  opacity:1;
+  transform:none;
+}
 </style>
 </head>
 
@@ -176,7 +182,7 @@ body{
 
 <audio id="music" src="assets/cancion1.mp3" loop></audio>
 
-<!-- INTRO -->
+<!-- INTRO CASTILLO -->
 <div id="intro" class="intro">
   <div>
     <div class="castle">
@@ -195,11 +201,11 @@ body{
 <section class="hero">
   <img src="assets/logo.jpg" class="logo">
   <img src="assets/bautizo.jpg" class="foto-bautizo">
-  <div class="titulo-xv">Mi Bautizo<br>Fernanda</div>
+  <div class="nombre">Mi Bautizo<br>Fernanda</div>
 </section>
 
 <!-- CONTADOR -->
-<section class="section">
+<section class="section reveal">
   <div class="countdown-glass">
     <div class="countdown">
       <div class="time-box"><span id="d">0</span><br>DÍAS</div>
@@ -211,7 +217,7 @@ body{
 </section>
 
 <!-- IGLESIA -->
-<section class="section">
+<section class="section reveal">
   <h2>⛪ Ceremonia</h2>
   <img src="assets/iglesia.jpg" style="width:90%;max-width:420px;border-radius:25px">
   <p>Lago del Oso esquina Calle del Ejido<br>Col. Ocho Cedros<br>Toluca, México</p>
@@ -219,7 +225,7 @@ body{
 </section>
 
 <!-- SALÓN -->
-<section class="section">
+<section class="section reveal">
   <h2>🎉 Recepción</h2>
   <img src="assets/salon.jpg" style="width:90%;max-width:420px;border-radius:25px">
   <p>Lago del Oso esquina Calle del Ejido<br>Col. Ocho Cedros<br>Toluca, México</p>
@@ -227,7 +233,7 @@ body{
 </section>
 
 <!-- VIDEO -->
-<section class="section">
+<section class="section reveal">
   <h2>💖 Un momento especial</h2>
   <video controls style="width:90%;max-width:420px;border-radius:30px">
     <source src="assets/video.mp4">
@@ -235,7 +241,7 @@ body{
 </section>
 
 <!-- PADRES / PADRINOS -->
-<section class="section">
+<section class="section reveal">
   <div class="glass-section">
     <h2>💖 Con la bendición de</h2>
     <div class="glass-grid">
@@ -252,7 +258,7 @@ body{
 </section>
 
 <!-- VESTIMENTA -->
-<section class="section">
+<section class="section reveal">
   <div class="glass-section">
     <h2>✨ Detalles importantes</h2>
     <div class="glass-grid">
@@ -268,13 +274,41 @@ body{
   </div>
 </section>
 
+<!-- CONFIRMACIÓN FINAL -->
+<section class="section reveal">
+  <div class="glass-section">
+    <h2>🎟️ Confirmación de Asistencia</h2>
+
+    <select id="personas" style="padding:12px;border-radius:14px">
+      <option value="">Selecciona personas</option>
+      <option value="1">1 persona</option>
+      <option value="2">2 personas</option>
+      <option value="3">3 personas</option>
+      <option value="4">4 personas</option>
+      <option value="5">5 personas</option>
+    </select>
+
+    <br><br>
+    <button class="btn" onclick="generarBoleto()">Generar boleto 🎫</button>
+
+    <div id="boleto" style="display:none;margin-top:30px">
+      <h3 id="folio"></h3>
+      <p id="cantidad"></p>
+      <div id="qrcode" style="margin:20px auto"></div>
+      <a id="whatsappLink" class="btn" target="_blank">Enviar WhatsApp 📲</a>
+    </div>
+  </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
 <script>
 const music=document.getElementById("music");
 
 function entrar(){
   const intro=document.getElementById("intro");
   intro.classList.add("hide");
-  setTimeout(()=>intro.style.display="none",1200);
+  setTimeout(()=>intro.remove(),1200);
   music.volume=0.5;
   music.play();
 }
@@ -282,17 +316,48 @@ function entrar(){
 /* CONTADOR */
 const fechaEvento=new Date("2027-01-23T12:00:00");
 setInterval(()=>{
-  const now=new Date();
-  const diff=fechaEvento-now;
+  const diff=fechaEvento-new Date();
   if(diff<=0)return;
   d.textContent=Math.floor(diff/86400000);
   h.textContent=Math.floor(diff/3600000)%24;
   m.textContent=Math.floor(diff/60000)%60;
   s.textContent=Math.floor(diff/1000)%60;
 },1000);
+
+/* SCROLL */
+const observer=new IntersectionObserver(e=>{
+  e.forEach(i=>i.isIntersecting&&i.target.classList.add("active"));
+},{threshold:.2});
+document.querySelectorAll(".reveal").forEach(r=>observer.observe(r));
+
+/* BOLETO */
+function generarBoleto(){
+  if(localStorage.getItem("boleto")){
+    alert("Este dispositivo ya generó un boleto 🎟️");
+    return;
+  }
+  const p=document.getElementById("personas").value;
+  if(!p)return alert("Selecciona personas");
+
+  let f=parseInt(localStorage.getItem("folio")||0)+1;
+  localStorage.setItem("folio",f);
+  localStorage.setItem("boleto","true");
+
+  const folioTxt="BF-"+String(f).padStart(4,"0");
+  folio.innerText="Folio: "+folioTxt;
+  cantidad.innerText="Personas: "+p;
+  boleto.style.display="block";
+
+  new QRCode(qrcode,{
+    text:`Bautizo Fernanda | ${folioTxt} | ${p} personas`,
+    width:180,height:180
+  });
+
+  whatsappLink.href=
+  `https://wa.me/527226828616?text=Confirmo%20asistencia%20al%20Bautizo%20de%20Fernanda%20💖%0AFolio:%20${folioTxt}%0APersonas:%20${p}`;
+}
 </script>
 
 </body>
 </html>
-
 
