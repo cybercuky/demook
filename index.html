@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Mi Bautizo Fernanda</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- FUENTES -->
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
+<style>
+:root{--principal:#ff4fd8;--secundario:#ffd700;}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Cinzel',serif;
+  background:url('assets/fondo.png') no-repeat center fixed;
+  background-size:cover;
+  color:#fff;
+  text-align:center;
+  overflow-x:hidden;
+}
+
+/* BOTONES */
+.btn{
+  display:inline-block;
+  padding:12px 30px;
+  border-radius:30px;
+  background:linear-gradient(135deg,var(--principal),var(--secundario));
+  color:#000;
+  font-weight:bold;
+  cursor:pointer;
+  text-decoration:none;
+}
+
+/* SECCIONES */
+.section{
+  padding:80px 20px;
+  background:rgba(0,0,0,.65);
+}
+
+/* ===== INTRO CASTILLO ===== */
+.intro{
+  position:fixed;
+  inset:0;
+  background:radial-gradient(circle,#000,#040404);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+  overflow:hidden;
+  transition:opacity 1.2s ease;
+}
+.intro.hide{opacity:0;pointer-events:none}
+
+.castle{
+  position:relative;
+  width:260px;
+  height:180px;
+  margin:0 auto 25px;
+  animation:castleRise 3s ease forwards;
+}
+.base{
+  position:absolute;bottom:0;width:100%;height:60px;
+  background:linear-gradient(#444,#222);
+  border-radius:0 0 30px 30px;
+}
+.tower{
+  position:absolute;bottom:60px;width:60px;
+  background:linear-gradient(#555,#333);
+  border-radius:20px 20px 0 0;
+}
+.tower.left{left:20px;height:80px}
+.tower.center{left:100px;height:120px}
+.tower.right{right:20px;height:80px}
+.tower::after{
+  content:'';
+  position:absolute;
+  top:-18px;
+  left:50%;
+  transform:translateX(-50%);
+  width:18px;height:18px;
+  background:gold;
+  border-radius:50%;
+  box-shadow:0 0 25px gold;
+}
+
+.nombre{
+  font-family:'Great Vibes',cursive;
+  font-size:5rem;
+  color:#ffb6ec;
+  opacity:0;
+  animation:magicReveal 2s ease forwards 2.5s;
+}
+.sub{
+  letter-spacing:4px;
+  color:var(--secundario);
+  margin-bottom:20px;
+}
+
+@keyframes castleRise{
+  from{opacity:0;transform:translateY(60px) scale(.8)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+@keyframes magicReveal{
+  to{opacity:1}
+}
+
+/* HERO */
+.hero{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+.logo{width:300px;margin:0 auto 20px}
+.titulo-xv{
+  font-family:'Great Vibes',cursive;
+  font-size:4rem;
+  color:#ff4fd8;
+}
+.foto-bautizo{
+  width:80%;
+  max-width:320px;
+  border-radius:30px;
+  margin:20px auto;
+  box-shadow:0 20px 40px rgba(255,215,0,.45);
+}
+
+/* CONTADOR */
+.countdown-glass{
+  max-width:420px;
+  margin:0 auto;
+  padding:25px;
+  border-radius:28px;
+  background:rgba(255,255,255,.18);
+  backdrop-filter:blur(16px);
+}
+.countdown{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+}
+.time-box{
+  background:rgba(0,0,0,.5);
+  border-radius:16px;
+  padding:10px;
+}
+.time-box span{font-size:1.6rem;color:#ffd700}
+
+/* CRISTAL */
+.glass-section{
+  max-width:900px;
+  margin:0 auto;
+  padding:40px 25px;
+  border-radius:30px;
+  background:linear-gradient(135deg,rgba(255,255,255,.28),rgba(255,255,255,.08));
+  backdrop-filter:blur(18px);
+}
+.glass-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:25px;
+}
+.glass-card{
+  padding:25px;
+  border-radius:22px;
+  background:rgba(0,0,0,.45);
+}
+.glass-card h3{color:#ffb6ec}
+</style>
+</head>
+
+<body>
+
+<audio id="music" src="assets/cancion1.mp3" loop></audio>
+
+<!-- INTRO -->
+<div id="intro" class="intro">
+  <div>
+    <div class="castle">
+      <div class="tower left"></div>
+      <div class="tower center"></div>
+      <div class="tower right"></div>
+      <div class="base"></div>
+    </div>
+    <h1 class="nombre">Fernanda</h1>
+    <p class="sub">MI BAUTIZO</p>
+    <button class="btn" onclick="entrar()">Entrar ✨</button>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <img src="assets/logo.jpg" class="logo">
+  <img src="assets/bautizo.jpg" class="foto-bautizo">
+  <div class="titulo-xv">Mi Bautizo<br>Fernanda</div>
+</section>
+
+<!-- CONTADOR -->
+<section class="section">
+  <div class="countdown-glass">
+    <div class="countdown">
+      <div class="time-box"><span id="d">0</span><br>DÍAS</div>
+      <div class="time-box"><span id="h">0</span><br>HORAS</div>
+      <div class="time-box"><span id="m">0</span><br>MIN</div>
+      <div class="time-box"><span id="s">0</span><br>SEG</div>
+    </div>
+  </div>
+</section>
+
+<!-- IGLESIA -->
+<section class="section">
+  <h2>⛪ Ceremonia</h2>
+  <img src="assets/iglesia.jpg" style="width:90%;max-width:420px;border-radius:25px">
+  <p>Lago del Oso esquina Calle del Ejido<br>Col. Ocho Cedros<br>Toluca, México</p>
+  <a class="btn" target="_blank" href="https://maps.app.goo.gl/Yc1K3hVfVB7M4aFF9">Ver ubicación</a>
+</section>
+
+<!-- SALÓN -->
+<section class="section">
+  <h2>🎉 Recepción</h2>
+  <img src="assets/salon.jpg" style="width:90%;max-width:420px;border-radius:25px">
+  <p>Lago del Oso esquina Calle del Ejido<br>Col. Ocho Cedros<br>Toluca, México</p>
+  <a class="btn" target="_blank" href="https://maps.app.goo.gl/Yc1K3hVfVB7M4aFF9">Ver ubicación</a>
+</section>
+
+<!-- VIDEO -->
+<section class="section">
+  <h2>💖 Un momento especial</h2>
+  <video controls style="width:90%;max-width:420px;border-radius:30px">
+    <source src="assets/video.mp4">
+  </video>
+</section>
+
+<!-- PADRES / PADRINOS -->
+<section class="section">
+  <div class="glass-section">
+    <h2>💖 Con la bendición de</h2>
+    <div class="glass-grid">
+      <div class="glass-card">
+        <h3>Mis Padres</h3>
+        <p>Nombre del Padre<br>Nombre de la Madre</p>
+      </div>
+      <div class="glass-card">
+        <h3>Mis Padrinos</h3>
+        <p>Nombre del Padrino<br>Nombre de la Madrina</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VESTIMENTA -->
+<section class="section">
+  <div class="glass-section">
+    <h2>✨ Detalles importantes</h2>
+    <div class="glass-grid">
+      <div class="glass-card">
+        <h3>👗 Vestimenta</h3>
+        <p>Vestimenta formal</p>
+      </div>
+      <div class="glass-card">
+        <h3>⏰ Horarios</h3>
+        <p>Ceremonia: 12:00 PM<br>Recepción: 2:00 PM</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+const music=document.getElementById("music");
+
+function entrar(){
+  const intro=document.getElementById("intro");
+  intro.classList.add("hide");
+  setTimeout(()=>intro.style.display="none",1200);
+  music.volume=0.5;
+  music.play();
+}
+
+/* CONTADOR */
+const fechaEvento=new Date("2027-01-23T12:00:00");
+setInterval(()=>{
+  const now=new Date();
+  const diff=fechaEvento-now;
+  if(diff<=0)return;
+  d.textContent=Math.floor(diff/86400000);
+  h.textContent=Math.floor(diff/3600000)%24;
+  m.textContent=Math.floor(diff/60000)%60;
+  s.textContent=Math.floor(diff/1000)%60;
+},1000);
+</script>
+
+</body>
+</html>
+
+
